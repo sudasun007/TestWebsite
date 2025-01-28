@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechShop - Your Ultimate Tech Store</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .nav-container {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: none;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .logo span {
+            color: #4CAF50;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #4CAF50;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Login Container */
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            margin: 100px auto;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: #4CAF50;
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #34495e;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #45a049, #4CAF50);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            padding-top: 80px;
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 20px 40px;
+            margin: 20px auto;
+            max-width: 1200px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-message h2 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .welcome-message p {
+            color: #666;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Products Grid */
+        .products-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-info h3 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+
+        .product-info p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            color: #4CAF50;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        /* Error Message */
+        .error-container {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .error-container p {
+            color: #dc2626;
+            margin: 0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .products {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-container" id="navBar">
+        <div class="nav-content">
+            <div class="logo">Tech<span>Shop</span></div>
+            <div class="nav-links">
+                <a href="#products">Products</a>
+                <a href="#categories">Categories</a>
+                <a href="#deals">Deals</a>
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+                <button onclick="handleLogout()" style="width: auto; padding: 8px 16px;">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Container -->
+    <div class="login-container animate__animated animate__fadeIn" id="loginContainer">
+        <h1>Welcome to TechShop</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit">Sign In</button>
+            <div id="errorContainer" class="error-container">
+                <p><i class="fas fa-exclamation-circle"></i> <span id="errorMessage"></span></p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-header">
+            <div class="welcome-message">
+                <h2>Welcome to TechShop</h2>
+                <p id="welcomeText">Discover our latest products</p>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar"></div>
+                <span id="userDisplayName"></span>
+            </div>
+        </div>
+
+        <div class="products-container">
+            <h2>Featured Products</h2>
+            <div class="products">
+                <!-- Product cards will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample product data
+        const products = [
+            {
+                name: "Smart Watch Pro",
+                price: 299.99,
+                description: "Advanced smartwatch with health tracking",
+                image: "./images/smartwatch.jpg"
+            },
+            {
+                name: "Wireless Headphones",
+                price: 199.99,
+                description: "Premium noise-canceling headphones",
+                image: "./images/wireless_headphones.jpeg"
+            },
+            {
+                name: "Ultra Slim Laptop",
+                price: 1299.99,
+                description: "Powerful and portable laptop",
+                image: "./images/laptop.jpeg"
+            },
+            {
+                name: "4K Smart TV",
+                price: 799.99,
+                description: "Crystal clear display with smart features",
+                image: "./images/tv.png"
+            },
+            {
+                name: "Gaming Console",
+                price: 499.99,
+                description: "Next-gen gaming experience",
+                image: "./images/gaming.jpeg"
+            },
+            {
+                name: "Wireless Earbuds",
+                price: 159.99,
+                description: "True wireless freedom with amazing sound",
+                image: "./images/earbuds.jpeg"
+            }
+        ];
+
+        // Cart functionality
+        let cartCount = 0;
+        
+        function updateCartCount() {
+            document.querySelector('.cart-count').textContent = cartCount;
+        }
+
+        function addToCart() {
+            cartCount++;
+            updateCartCount();
+            // Add animation to cart icon
+            const cartIcon = document.querySelector('.cart-icon');
+            cartIcon.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                cartIcon.style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        // Create product cards
+        function createProductCards() {
+            const productsContainer = document.querySelector('.products');
+            productsContainer.innerHTML = '';
+
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="price">$${product.price}</div>
+                        <button class="add-to-cart" onclick="addToCart()">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                `;
+                productsContainer.appendChild(productCard);
+            });
+        }
+
+        function handleLogin(username) {
+            document.getElementById('navBar').style.display = 'block';
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            
+            // Update user info
+            document.getElementById('userDisplayName').textContent = username;
+            document.getElementById('userAvatar').textContent = getInitials(username);
+            document.getElementById('welcomeText').textContent = 
+                `Welcome back, ${username}! We're excited to have you here.`;
+            
+            // Create product cards with animation
+            createProductCards();
+            animateProducts();
+        }
+
+        function handleLogout() {
+            document.getElementById('navBar').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            
+            // Reset form and cart
+            document.getElementById('loginForm').reset();
+            cartCount = 0;
+            updateCartCount();
+        }
+
+        function getInitials(name) {
+            return name.split(' ')
+                .map(word => word[0])
+                .join('')
+                .toUpperCase();
+        }
+
+        function showError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorContainer.style.display = 'block';
+            
+            // Add shake animation
+            const loginContainer = document.getElementById('loginContainer');
+            loginContainer.classList.add('animate__animated', 'animate__shakeX');
+            setTimeout(() => {
+                loginContainer.classList.remove('animate__animated', 'animate__shakeX');
+            }, 1000);
+        }
+
+        function animateProducts() {
+            const products = document.querySelectorAll('.product-card');
+            products.forEach((product, index) => {
+                product.style.opacity = '0';
+                product.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    product.style.opacity = '1';
+                    product.style.transform = 'translateY(0)';
+                    product.style.transition = 'all 0.5s ease';
+                }, index * 100);
+            });
+        }
+
+        // Form submission handler
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            // Validate input
+            if (!username || !password) {
+                showError('Please enter both username and password.');
+                return;
+            }
+
+            // Check credentials (for demo: testuser/password123)
+            if (username === 'testuser' && password === 'password123') {
+                handleLogin(username);
+            } else {
+                showError('Invalid username or password. Please try again.');
+            }
+        });
+
+        // Add hover effects to product cards
+        document.addEventListener('mouseover', function(event) {
+            if (event.target.closest('.product-card')) {
+                const card = event.target.closest('.product-card');
+                card.style.transform = 'translateY(-10px)';
+            }
+        }, true);
+
+        document.addEventListener('mouseout', function(event) {
+            if (event.target.closest('.product-card')) {
+                const card = event.target.closest('.product-card');
+                card.style.transform = 'translateY(0)';
+            }
+        }, true);
+
+        // Initialize tooltips and other UI elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide navigation initially
+            document.getElementById('navBar').style.display = 'none';
+            
+            // Set up any additional UI components
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    addToCart();
+                    
+                    // Add success animation
+                    this.innerHTML = '<i class="fas fa-check"></i> Added!';
+                    this.style.background = '#45a049';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-shopping-cart"></i> Add to Cart';
+                        this.style.background = '#4CAF50';
+                    }, 1500);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
